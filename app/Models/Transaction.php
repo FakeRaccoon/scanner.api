@@ -10,4 +10,6 @@ class Transaction extends Model
     use HasFactory;
 
     protected $table = 'transaction';
+
+    protected $fillable = ['form_id', 'name', 'selected'];
 }

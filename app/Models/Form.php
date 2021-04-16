@@ -11,6 +11,8 @@ class Form extends Model
 
     protected $table = 'form';
 
+    protected $fillable = ['status', 'task', 'pick_up_date', 'request_date', 'received_date'];
+
     public function transactions()
     {
         return $this->hasMany(Transaction::class);

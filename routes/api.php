@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\API\FormController;
+use App\Http\Controllers\API\TransactionController;
 use App\Http\Controllers\API\UserController;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +22,13 @@ Route::get('/user', [UserController::class, 'getData']);
 Route::post('/login', [UserController::class, 'login']);
 
 Route::get('/form', [FormController::class, 'getData']);
+Route::get('/form/id', [FormController::class, 'getDataId']);
+Route::get('/form/date', [FormController::class, 'getDataByDate']);
+Route::post('/form/create', [FormController::class, 'createForm']);
+Route::get('/form/status', [FormController::class, 'getDataStatus']);
+Route::post('/form/update', [FormController::class, 'updateForm']);
+
+Route::post('/transaction/create', [TransactionController::class, 'createTransaction']);
+Route::post('/transaction/update', [TransactionController::class, 'updateTransaction']);
+
+
