@@ -115,6 +115,67 @@ class FormController extends Controller
         return response()->json($response);
     }
 
+    public function getDataType(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'type'       => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $response = [
+                'status'  => 400,
+                'message' => 'Validasi!',
+                'result'  => $validator->errors()
+            ];
+
+            return response()->json($response, 400);
+        } else {
+
+            $data = Form::where('tax_billing', $request->type)->get();
+
+            $result = [];
+            if ($data) {
+                if ($data->count() > 0) {
+                    foreach ($data as $d) {
+                        $result[] = [
+                            'id'        => $d->id,
+                            'status'    => $d->status,
+                            'task'      => $d->task,
+                            'request_date' => $d->request_date,
+                            'pick_up_date' => $d->pick_up_date,
+                            'received_date' => $d->received_date,
+                            'transactions' => $d->transactions,
+                            'created_at'  => date('Y-m-d H:i:s', strtotime($d->created_at)),
+                            'updated_at'  => date('Y-m-d H:i:s', strtotime($d->updated_at))
+                        ];
+                    }
+                    $response = [
+                        'status'     => 200,
+                        'message'    => 'Data ditemukan!',
+                        'total_data' => count($result),
+                        'result'     => $result
+                    ];
+                } else {
+                    $response = [
+                        'status'     => 404,
+                        'message'    => 'Data tidak ditemukan!',
+                        'total_data' => count($result),
+                        'result'     => $result
+                    ];
+                }
+            } else {
+                $response = [
+                    'status'  => 500,
+                    'message' => 'Server error!'
+                ];
+            }
+        }
+
+
+        return response()->json($response);
+    }
+
     public function getDataByDate(Request $request)
     {
 
