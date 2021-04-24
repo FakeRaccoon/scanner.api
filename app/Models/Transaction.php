@@ -11,5 +11,5 @@ class Transaction extends Model
 
     protected $table = 'transaction';
 
-    protected $fillable = ['form_id', 'name', 'selected'];
+    protected $fillable = ['form_id', 'name', 'selected', 'selected2', 'type'];
 }

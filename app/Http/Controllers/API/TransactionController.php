@@ -15,6 +15,7 @@ class TransactionController extends Controller
             'form_id'       => 'required',
             'name'          => 'required',
             'selected'      => 'required',
+            'selected2'     => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -30,6 +31,7 @@ class TransactionController extends Controller
                 'form_id'   => $request->form_id,
                 'name'      => $request->name,
                 'selected'  => $request->selected,
+                'selected2' => $request->selected2,
             ]);
 
             if ($query) {
@@ -55,8 +57,10 @@ class TransactionController extends Controller
     public function updateTransaction(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id'                => 'required',
-            'selected'            => 'required',
+            'id'            => 'required',
+            'selected'      => 'required',
+            'selected2'     => 'required',
+            'type'          => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -70,7 +74,9 @@ class TransactionController extends Controller
         } else {
             
             $query = Transaction::where('id', $request->id)->update([
-                'selected' => $request->selected,
+                'selected'  => $request->selected,
+                'selected2' => $request->selected2,
+                'type'      => $request->type,
             ]);
 
             if ($query) {

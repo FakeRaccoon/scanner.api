@@ -115,6 +115,70 @@ class FormController extends Controller
         return response()->json($response);
     }
 
+    public function getData2Status(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'status1'       => 'required',
+            'status2'       => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            $response = [
+                'status'  => 400,
+                'message' => 'Validasi!',
+                'result'  => $validator->errors()
+            ];
+
+            return response()->json($response, 400);
+        } else {
+
+            $data = Form::whereBetween('status', [$request->status1, $request->status2])->get();
+
+            $result = [];
+            if ($data) {
+                if ($data->count() > 0) {
+                    foreach ($data as $d) {
+                        $result[] = [
+                            'id'        => $d->id,
+                            'status'    => $d->status,
+                            'task'      => $d->task,
+                            'tax'       => $d->tax,
+                            'billing'       => $d->billing,
+                            'request_date' => $d->request_date,
+                            'pick_up_date' => $d->pick_up_date,
+                            'received_date' => $d->received_date,
+                            'transactions' => $d->transactions,
+                            'created_at'  => date('Y-m-d H:i:s', strtotime($d->created_at)),
+                            'updated_at'  => date('Y-m-d H:i:s', strtotime($d->updated_at))
+                        ];
+                    }
+                    $response = [
+                        'status'     => 200,
+                        'message'    => 'Data ditemukan!',
+                        'total_data' => count($result),
+                        'result'     => $result
+                    ];
+                } else {
+                    $response = [
+                        'status'     => 404,
+                        'message'    => 'Data tidak ditemukan!',
+                        'total_data' => count($result),
+                        'result'     => $result
+                    ];
+                }
+            } else {
+                $response = [
+                    'status'  => 500,
+                    'message' => 'Server error!'
+                ];
+            }
+        }
+
+
+        return response()->json($response);
+    }
+
     public function getDataType(Request $request)
     {
 
@@ -132,7 +196,7 @@ class FormController extends Controller
             return response()->json($response, 400);
         } else {
 
-            $data = Form::where('tax_billing', $request->type)->get();
+            $data = Form::all();
 
             $result = [];
             if ($data) {
@@ -145,7 +209,7 @@ class FormController extends Controller
                             'request_date' => $d->request_date,
                             'pick_up_date' => $d->pick_up_date,
                             'received_date' => $d->received_date,
-                            'transactions' => $d->transactions,
+                            'transactions' => $d->transactionsType,
                             'created_at'  => date('Y-m-d H:i:s', strtotime($d->created_at)),
                             'updated_at'  => date('Y-m-d H:i:s', strtotime($d->updated_at))
                         ];
@@ -266,6 +330,8 @@ class FormController extends Controller
                             'id'        => $d->id,
                             'status'    => $d->status,
                             'task'      => $d->task,
+                            'tax'       => $d->tax,
+                            'billing'       => $d->billing,
                             'request_date' => $d->request_date,
                             'pick_up_date' => $d->pick_up_date,
                             'received_date' => $d->received_date,
@@ -349,6 +415,8 @@ class FormController extends Controller
             'id'                => 'required',
             'task'              => 'required',
             'status'            => 'required',
+            'tax'               => 'nullable',
+            'billing'           => 'nullable',
             'request_date'      => 'nullable',
             'pick_up_date'      => 'nullable',
             'received_date'     => 'nullable',
@@ -365,9 +433,11 @@ class FormController extends Controller
         } else {
             $query = Form::where('id', $request->id)->update([
                 'task'          => $request->task,
-                'status' => $request->status,
-                'request_date' => $request->request_date,
-                'pick_up_date' => $request->pick_up_date,
+                'status'        => $request->status,
+                'tax'           => $request->tax,
+                'billing'       => $request->billing,
+                'request_date'  => $request->request_date,
+                'pick_up_date'  => $request->pick_up_date,
                 'received_date' => $request->received_date,
             ]);
 

@@ -26,6 +26,7 @@ Route::get('/form/id', [FormController::class, 'getDataId']);
 Route::get('/form/date', [FormController::class, 'getDataByDate']);
 Route::post('/form/create', [FormController::class, 'createForm']);
 Route::get('/form/status', [FormController::class, 'getDataStatus']);
+Route::get('/form/status2', [FormController::class, 'getData2Status']);
 Route::get('/form/type', [FormController::class, 'getDataType']);
 Route::post('/form/update', [FormController::class, 'updateForm']);
 
