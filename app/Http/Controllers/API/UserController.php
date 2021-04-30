@@ -201,7 +201,13 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
+            $response = [
+                'status'  => 400,
+                'message' => 'Validasi!',
+                'result'  => $validator->errors()
+            ];
+
+            return response()->json($response, 400);
         }
 
         $input = $request->all();
@@ -210,7 +216,13 @@ class UserController extends Controller
         $success['token'] =  $user->createToken('MyApp')->accessToken;
         $success['username'] =  $user->username;
 
-        return $this->sendResponse($success, 'User register successfully.');
+        $response = [
+            'status'  => 400,
+            'message' => 'Validasi!',
+            'result'  => $success
+        ];
+
+        return response()->json($response);
     }
 
 
