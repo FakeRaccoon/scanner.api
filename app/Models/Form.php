@@ -11,15 +11,15 @@ class Form extends Model
 
     protected $table = 'form';
 
-    protected $fillable = ['status', 'task', 'tax', 'billing', 'pick_up_date', 'request_date', 'received_date'];
+    protected $fillable = ['status', 'task', 'other_task', 'tax', 'billing', 'pick_up_date', 'request_date', 'received_date'];
 
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
     }
 
-    public function transactionsType()
+    public function otherTransactions()
     {
-        return $this->hasMany(Transaction::class)->where('type', 1);
+        return $this->hasMany(OtherTransaction::class);
     }
 }
