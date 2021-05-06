@@ -239,6 +239,8 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|min:3',
             'username' => 'required|min:3',
+            'role'     => 'required',
+            'selected' => 'required',
             'password' => 'required|min:6',
         ]);
 
@@ -252,17 +254,29 @@ class UserController extends Controller
             return response()->json($response, 400);
         }
 
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
-        $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['username'] =  $user->username;
+        $query = User::create([
+            'name'      => $request->name,
+            'username'  => $request->username,
+            'role'      => $request->role,
+            'selected'  => $request->selected,
+            'password'  => Hash::make($request->password),
+        ]);
 
-        $response = [
-            'status'  => 400,
-            'message' => 'Validasi!',
-            'result'  => $success
-        ];
+        if ($query) {
+            $response = [
+                'status'  => 200,
+                'message' => 'Data berhasil diproses!',
+                'result'  => $request->all()
+            ];
+        } else {
+            $response = [
+                'status'  => 400,
+                'message' => 'Data gagal diproses!',
+                'result'  => $request->all()
+            ];
+
+            return response()->json($response, 400);
+        }
 
         return response()->json($response);
     }
