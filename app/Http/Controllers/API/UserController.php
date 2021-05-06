@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -187,6 +188,47 @@ class UserController extends Controller
 
                 return response()->json($response, 400);
             }
+        }
+
+        return response()->json($response);
+    }
+
+    public function changePassword(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'username'      => 'required',
+            'password'      => 'required',
+        ]);
+
+        if ($validator->fails()) {
+
+            $response = [
+                'status'  => 400,
+                'message' => 'Validasi!',
+                'result'  => $validator->errors()
+            ];
+
+            return response()->json($response, 400);
+        }
+        $query = User::where('username', $request->username)->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        if ($query) {
+            $response = [
+                'status'  => 200,
+                'message' => 'Data berhasil diproses!',
+                'result'  => $request->all()
+            ];
+        } else {
+            $response = [
+                'status'  => 400,
+                'message' => 'Data gagal diproses!',
+                'result'  => $request->all()
+            ];
+
+            return response()->json($response, 400);
         }
 
         return response()->json($response);
