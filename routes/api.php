@@ -3,6 +3,8 @@
 use App\Http\Controllers\API\FormController;
 use App\Http\Controllers\API\TransactionController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\OtherTransactionController;
+use App\Models\OtherTransaction;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,5 +36,7 @@ Route::post('/form/update', [FormController::class, 'updateForm']);
 
 Route::post('/transaction/create', [TransactionController::class, 'createTransaction']);
 Route::post('/transaction/update', [TransactionController::class, 'updateTransaction']);
+
+Route::post('/otherTransaction/create', [OtherTransactionController::class, 'createTransaction']);
 
 
