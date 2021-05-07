@@ -38,5 +38,6 @@ Route::post('/transaction/create', [TransactionController::class, 'createTransac
 Route::post('/transaction/update', [TransactionController::class, 'updateTransaction']);
 
 Route::post('/otherTransaction/create', [OtherTransactionController::class, 'createTransaction']);
+Route::post('/otherTransaction/update', [OtherTransactionController::class, 'updateTransaction']);
 
 
