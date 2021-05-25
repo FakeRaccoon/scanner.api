@@ -77,7 +77,7 @@ class FormController extends Controller
             return response()->json($response, 400);
         } else {
 
-            $data = Form::where('status', $request->status)->orderByDesc('created_at')->get();
+            $data = Form::where('status', $request->status)->orderByDesc('received_date')->get();
 
             $result = [];
             if ($data) {
@@ -219,15 +219,21 @@ class FormController extends Controller
                 if ($data->count() > 0) {
                     foreach ($data as $d) {
                         $result[] = [
-                            'id'        => $d->id,
-                            'status'    => $d->status,
-                            'task'      => $d->task,
-                            'request_date' => $d->request_date,
-                            'pick_up_date' => $d->pick_up_date,
-                            'received_date' => $d->received_date,
-                            'transactions' => $d->transactionsType,
-                            'created_at'  => date('Y-m-d H:i:s', strtotime($d->created_at)),
-                            'updated_at'  => date('Y-m-d H:i:s', strtotime($d->updated_at))
+                            'id'                => $d->id,
+                            'status'            => $d->status,
+                            'task'              => $d->task,
+                            'other_task'        => $d->other_task,
+                            'tax'               => $d->tax,
+                            'billing'           => $d->billing,
+                            'from_user'         => $d->fromUser,
+                            'to_user'           => $d->toUser,
+                            'request_date'      => $d->request_date,
+                            'pick_up_date'      => $d->pick_up_date,
+                            'received_date'     => $d->received_date,
+                            'transactions'      => $d->transactions,
+                            'other_transactions' => $d->otherTransactions,
+                            'created_at'        => date('Y-m-d H:i:s', strtotime($d->created_at)),
+                            'updated_at'        => date('Y-m-d H:i:s', strtotime($d->updated_at))
                         ];
                     }
                     $response = [
@@ -283,15 +289,21 @@ class FormController extends Controller
                 if ($data->count() > 0) {
                     foreach ($data as $d) {
                         $result[] = [
-                            'id'        => $d->id,
-                            'status'    => $d->status,
-                            'task'      => $d->task,
-                            'request_date' => $d->request_date,
-                            'pick_up_date' => $d->pick_up_date,
-                            'received_date' => $d->received_date,
-                            'transactions' => $d->transactions,
-                            'created_at'  => date('Y-m-d H:i:s', strtotime($d->created_at)),
-                            'updated_at'  => date('Y-m-d H:i:s', strtotime($d->updated_at))
+                            'id'                => $d->id,
+                            'status'            => $d->status,
+                            'task'              => $d->task,
+                            'other_task'        => $d->other_task,
+                            'tax'               => $d->tax,
+                            'billing'           => $d->billing,
+                            'from_user'         => $d->fromUser,
+                            'to_user'           => $d->toUser,
+                            'request_date'      => $d->request_date,
+                            'pick_up_date'      => $d->pick_up_date,
+                            'received_date'     => $d->received_date,
+                            'transactions'      => $d->transactions,
+                            'other_transactions' => $d->otherTransactions,
+                            'created_at'        => date('Y-m-d H:i:s', strtotime($d->created_at)),
+                            'updated_at'        => date('Y-m-d H:i:s', strtotime($d->updated_at))
                         ];
                     }
                     $response = [
@@ -349,6 +361,8 @@ class FormController extends Controller
                             'other_task'        => $d->other_task,
                             'tax'               => $d->tax,
                             'billing'           => $d->billing,
+                            'from_user'         => $d->fromUser,
+                            'to_user'           => $d->toUser,
                             'request_date'      => $d->request_date,
                             'pick_up_date'      => $d->pick_up_date,
                             'received_date'     => $d->received_date,
@@ -437,7 +451,8 @@ class FormController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id'                => 'required',
-            'task'              => 'required',
+            'task'              => 'nullable',
+            'other_task'        => 'nullable',
             'status'            => 'required',
             'tax'               => 'nullable',
             'billing'           => 'nullable',
@@ -457,6 +472,7 @@ class FormController extends Controller
         } else {
             $query = Form::where('id', $request->id)->update([
                 'task'          => $request->task,
+                'other_task'    => $request->other_task,
                 'status'        => $request->status,
                 'tax'           => $request->tax,
                 'billing'       => $request->billing,
