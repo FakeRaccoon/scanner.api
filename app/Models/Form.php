@@ -11,7 +11,7 @@ class Form extends Model
 
     protected $table = 'form';
 
-    protected $fillable = ['status', 'task', 'other_task', 'tax', 'billing', 'pick_up_date', 'request_date', 'received_date'];
+    protected $fillable = ['status', 'task', 'other_task', 'tax', 'billing', 'pick_up_date', 'request_date', 'received_date', 'from_id', 'to_id'];
 
     public function transactions()
     {
@@ -21,5 +21,15 @@ class Form extends Model
     public function otherTransactions()
     {
         return $this->hasMany(OtherTransaction::class);
+    }
+
+    public function fromUser()
+    {
+        return $this->belongsTo(User::class, 'from_id', 'id');
+    }
+
+    public function toUser()
+    {
+        return $this->belongsTo(User::class, 'to_id', 'id');
     }
 }

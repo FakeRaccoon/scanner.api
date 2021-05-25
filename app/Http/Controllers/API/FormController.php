@@ -24,6 +24,8 @@ class FormController extends Controller
                         'other_task'        => $d->other_task,
                         'tax'               => $d->tax,
                         'billing'           => $d->billing,
+                        'from_user'         => $d->fromUser,
+                        'to_user'           => $d->toUser,
                         'request_date'      => $d->request_date,
                         'pick_up_date'      => $d->pick_up_date,
                         'received_date'     => $d->received_date,
@@ -75,22 +77,28 @@ class FormController extends Controller
             return response()->json($response, 400);
         } else {
 
-            $data = Form::where('status', $request->status)->get();
+            $data = Form::where('status', $request->status)->orderByDesc('created_at')->get();
 
             $result = [];
             if ($data) {
                 if ($data->count() > 0) {
                     foreach ($data as $d) {
                         $result[] = [
-                            'id'        => $d->id,
-                            'status'    => $d->status,
-                            'task'      => $d->task,
-                            'request_date' => $d->request_date,
-                            'pick_up_date' => $d->pick_up_date,
-                            'received_date' => $d->received_date,
-                            'transactions' => $d->transactions,
-                            'created_at'  => date('Y-m-d H:i:s', strtotime($d->created_at)),
-                            'updated_at'  => date('Y-m-d H:i:s', strtotime($d->updated_at))
+                            'id'                => $d->id,
+                            'status'            => $d->status,
+                            'task'              => $d->task,
+                            'other_task'        => $d->other_task,
+                            'tax'               => $d->tax,
+                            'billing'           => $d->billing,
+                            'from_user'         => $d->fromUser,
+                            'to_user'           => $d->toUser,
+                            'request_date'      => $d->request_date,
+                            'pick_up_date'      => $d->pick_up_date,
+                            'received_date'     => $d->received_date,
+                            'transactions'      => $d->transactions,
+                            'other_transactions' => $d->otherTransactions,
+                            'created_at'        => date('Y-m-d H:i:s', strtotime($d->created_at)),
+                            'updated_at'        => date('Y-m-d H:i:s', strtotime($d->updated_at))
                         ];
                     }
                     $response = [
@@ -150,6 +158,8 @@ class FormController extends Controller
                             'other_task'        => $d->other_task,
                             'tax'               => $d->tax,
                             'billing'           => $d->billing,
+                            'from_user'         => $d->fromUser,
+                            'to_user'           => $d->toUser,
                             'request_date'      => $d->request_date,
                             'pick_up_date'      => $d->pick_up_date,
                             'received_date'     => $d->received_date,
@@ -378,7 +388,9 @@ class FormController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'status'            => 'required',
-            'task'              => 'required',
+            'task'              => 'nullable',
+            'from_id'           => 'nullable',
+            'to_id'             => 'nullable',
             'request_date'      => 'required',
             'other_task'        => 'nullable',
         ]);
@@ -395,6 +407,8 @@ class FormController extends Controller
             $query = Form::create([
                 'status'            => $request->status,
                 'task'              => $request->task,
+                'from_id'           => $request->from_id,
+                'to_id'             => $request->to_id,
                 'request_date'      => $request->request_date,
                 'other_task'        => $request->other_task,
             ]);
