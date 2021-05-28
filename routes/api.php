@@ -37,6 +37,8 @@ Route::post('/form/delete', [FormController::class, 'deleteForm']);
 
 Route::post('/transaction/create', [TransactionController::class, 'createTransaction']);
 Route::post('/transaction/update', [TransactionController::class, 'updateTransaction']);
+Route::post('/transaction/delete', [TransactionController::class, 'deleteTransaction']);
 
 Route::post('/otherTransaction/create', [OtherTransactionController::class, 'createTransaction']);
 Route::post('/otherTransaction/update', [OtherTransactionController::class, 'updateTransaction']);
+Route::post('/otherTransaction/delete', [OtherTransactionController::class, 'deleteTransaction']);
