@@ -33,6 +33,7 @@ Route::get('/form/status', [FormController::class, 'getDataStatus']);
 Route::get('/form/status2', [FormController::class, 'getData2Status']);
 Route::get('/form/type', [FormController::class, 'getDataType']);
 Route::post('/form/update', [FormController::class, 'updateForm']);
+Route::post('/form/delete', [FormController::class, 'deleteForm']);
 
 Route::post('/transaction/create', [TransactionController::class, 'createTransaction']);
 Route::post('/transaction/update', [TransactionController::class, 'updateTransaction']);
