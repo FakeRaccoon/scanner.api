@@ -268,6 +268,7 @@ class FormController extends Controller
         $validator = Validator::make($request->all(), [
             'from_date'        => 'required',
             'to_date'          => 'required',
+            'status'           => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -281,7 +282,7 @@ class FormController extends Controller
         } else {
 
             $data = Form::whereDate('request_date', '>=', $request->from_date)
-                ->whereDate('request_date', '<=', $request->to_date)
+                ->whereDate('request_date', '<=', $request->to_date)->where('status', $request->status)
                 ->get();
 
             $result = [];
