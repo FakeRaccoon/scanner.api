@@ -14,6 +14,7 @@ class TransactionController extends Controller
         $validator = Validator::make($request->all(), [
             'form_id'       => 'required',
             'name'          => 'required',
+            'to_id'         => 'nullable',
             'selected'      => 'required',
             'selected2'     => 'required',
         ]);
@@ -30,6 +31,7 @@ class TransactionController extends Controller
             $query = Transaction::create([
                 'form_id'   => $request->form_id,
                 'name'      => $request->name,
+                'to_id'     => $request->to_id,
                 'selected'  => $request->selected,
                 'selected2' => $request->selected2,
             ]);
@@ -61,6 +63,7 @@ class TransactionController extends Controller
             'selected'      => 'required',
             'selected2'     => 'required',
             'type'          => 'nullable',
+            'to_id'         => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -72,11 +75,12 @@ class TransactionController extends Controller
 
             return response()->json($response, 400);
         } else {
-            
+
             $query = Transaction::where('id', $request->id)->update([
                 'selected'  => $request->selected,
                 'selected2' => $request->selected2,
                 'type'      => $request->type,
+                'to_id'     => $request->to_id,
             ]);
 
             if ($query) {
@@ -114,7 +118,7 @@ class TransactionController extends Controller
 
             return response()->json($response, 400);
         } else {
-            
+
             $query = Transaction::where('id', $request->id)->delete();
 
             if ($query) {

@@ -11,7 +11,7 @@ class Form extends Model
 
     protected $table = 'form';
 
-    protected $fillable = ['status', 'task', 'other_task', 'tax', 'billing', 'pick_up_date', 'request_date', 'received_date', 'from_id', 'to_id'];
+    protected $fillable = ['status', 'task', 'other_task', 'tax', 'billing', 'pick_up_date', 'request_date', 'received_date', 'from_id', 'to_id', 'note'];
 
     public function transactions()
     {

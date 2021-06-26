@@ -11,7 +11,7 @@ class FormController extends Controller
 {
     public function getData()
     {
-        $data = Form::all();
+        $data = Form::with('transactions.toUser')->get();
 
         $result = [];
         if ($data) {
@@ -22,6 +22,7 @@ class FormController extends Controller
                         'status'            => $d->status,
                         'task'              => $d->task,
                         'other_task'        => $d->other_task,
+                        'note'              => $d->note,
                         'tax'               => $d->tax,
                         'billing'           => $d->billing,
                         'from_user'         => $d->fromUser,
@@ -77,7 +78,7 @@ class FormController extends Controller
             return response()->json($response, 400);
         } else {
 
-            $data = Form::where('status', $request->status)->orderByDesc('received_date')->get();
+            $data = Form::where('status', $request->status)->orderByDesc('received_date')->with('transactions.toUser')->get();
 
             $result = [];
             if ($data) {
@@ -88,6 +89,7 @@ class FormController extends Controller
                             'status'            => $d->status,
                             'task'              => $d->task,
                             'other_task'        => $d->other_task,
+                            'note'              => $d->note,
                             'tax'               => $d->tax,
                             'billing'           => $d->billing,
                             'from_user'         => $d->fromUser,
@@ -145,7 +147,7 @@ class FormController extends Controller
             return response()->json($response, 400);
         } else {
 
-            $data = Form::whereBetween('status', [$request->status1, $request->status2])->get();
+            $data = Form::whereBetween('status', [$request->status1, $request->status2])->with('transactions.toUser')->get();
 
             $result = [];
             if ($data) {
@@ -156,6 +158,7 @@ class FormController extends Controller
                             'status'            => $d->status,
                             'task'              => $d->task,
                             'other_task'        => $d->other_task,
+                            'note'              => $d->note,
                             'tax'               => $d->tax,
                             'billing'           => $d->billing,
                             'from_user'         => $d->fromUser,
@@ -268,6 +271,7 @@ class FormController extends Controller
         $validator = Validator::make($request->all(), [
             'from_date'        => 'required',
             'to_date'          => 'required',
+            'status'           => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -281,7 +285,7 @@ class FormController extends Controller
         } else {
 
             $data = Form::whereDate('request_date', '>=', $request->from_date)
-                ->whereDate('request_date', '<=', $request->to_date)
+                ->whereDate('request_date', '<=', $request->to_date)->where('status', $request->status)->with('transactions.toUser')
                 ->get();
 
             $result = [];
@@ -293,6 +297,7 @@ class FormController extends Controller
                             'status'            => $d->status,
                             'task'              => $d->task,
                             'other_task'        => $d->other_task,
+                            'note'              => $d->note,
                             'tax'               => $d->tax,
                             'billing'           => $d->billing,
                             'from_user'         => $d->fromUser,
@@ -348,7 +353,7 @@ class FormController extends Controller
 
             return response()->json($response, 400);
         } else {
-            $data = Form::where('id', $request->id)->get();
+            $data = Form::where('id', $request->id)->with('transactions.toUser')->get();
 
             $result = [];
             if ($data) {
@@ -359,6 +364,7 @@ class FormController extends Controller
                             'status'            => $d->status,
                             'task'              => $d->task,
                             'other_task'        => $d->other_task,
+                            'note'              => $d->note,
                             'tax'               => $d->tax,
                             'billing'           => $d->billing,
                             'from_user'         => $d->fromUser,
@@ -402,6 +408,7 @@ class FormController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'status'            => 'required',
+            'note'              => 'nullable',
             'task'              => 'nullable',
             'from_id'           => 'nullable',
             'to_id'             => 'nullable',
@@ -421,6 +428,7 @@ class FormController extends Controller
             $query = Form::create([
                 'status'            => $request->status,
                 'task'              => $request->task,
+                'note'              => $request->note,
                 'from_id'           => $request->from_id,
                 'to_id'             => $request->to_id,
                 'request_date'      => $request->request_date,
@@ -453,7 +461,9 @@ class FormController extends Controller
             'id'                => 'required',
             'task'              => 'nullable',
             'other_task'        => 'nullable',
+            'note'              => 'nullable',
             'status'            => 'required',
+            'to_id'             => 'nullable',
             'tax'               => 'nullable',
             'billing'           => 'nullable',
             'request_date'      => 'nullable',
@@ -474,6 +484,8 @@ class FormController extends Controller
                 'task'          => $request->task,
                 'other_task'    => $request->other_task,
                 'status'        => $request->status,
+                'note'          => $request->note,
+                'to_id'         => $request->to_id,
                 'tax'           => $request->tax,
                 'billing'       => $request->billing,
                 'request_date'  => $request->request_date,

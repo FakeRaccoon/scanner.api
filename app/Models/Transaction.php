@@ -11,5 +11,10 @@ class Transaction extends Model
 
     protected $table = 'transaction';
 
-    protected $fillable = ['form_id', 'name', 'selected', 'selected2', 'type'];
+    protected $fillable = ['form_id', 'name', 'selected', 'selected2', 'type', 'to_id'];
+
+    public function toUser()
+    {
+        return $this->belongsTo(User::class, 'to_id', 'id');
+    }
 }
