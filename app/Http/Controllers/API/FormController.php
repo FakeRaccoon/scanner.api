@@ -285,7 +285,11 @@ class FormController extends Controller
         } else {
 
             $data = Form::whereDate('request_date', '>=', $request->from_date)
+<<<<<<< HEAD
                 ->whereDate('request_date', '<=', $request->to_date)->where('status', $request->status)->with('transactions.toUser')
+=======
+                ->whereDate('request_date', '<=', $request->to_date)->where('status', $request->status)
+>>>>>>> 8889f4731dc73cf38003960603b518b00b9f39cf
                 ->get();
 
             $result = [];
