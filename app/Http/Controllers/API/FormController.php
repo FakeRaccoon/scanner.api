@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Form;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -284,8 +285,15 @@ class FormController extends Controller
             return response()->json($response, 400);
         } else {
 
-            $data = Form::whereDate('request_date', '>=', $request->from_date)
-                ->whereDate('request_date', '<=', $request->to_date)->where('status', $request->status)->with('transactions.toUser')
+
+            $start_date = Carbon::parse($request->from_date);
+            $end_date = Carbon::parse($request->to_date);
+
+            $from = $start_date->startOfDay();
+            $to = $end_date->endOfDay();
+
+
+            $data = Form::whereBetween('received_date', [$from, $to])->where('status', $request->status)->with('transactions.toUser')->orderByDesc('received_date')
                 ->get();
 
             $result = [];
